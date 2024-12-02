@@ -56,7 +56,31 @@ Tentative
     
     add a frame that consist of dashes or vertical lines
 
-    
+
+
+
+EXAMPLE of display
+
++ Landing Page
+
+|---------------------------------------------------|
+|                                                   |
+|     Welcome to the Philippine I.D Application     |
+|                      1                            |
+|                                                   |
+|---------------------------------------------------|
+
+Press Enter to continue
+
++ Login Page 
+|---------------------------------------------------|
+|                                                   |
+|   Press 1 to Login                                |
+|   Press 2 to Register                             |
+|   Press 0 to Exit                                 |
+|                                                   |
+|---------------------------------------------------|
+
 
 
 
