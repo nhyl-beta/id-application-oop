@@ -5,14 +5,14 @@ public class RunMain {
 
     public static void main(String[] args) {
         Utils.clearScreen();
-        String landingMessage = "Welcome to Philippines!";
+        String landingMessage = "      Welcome to Philippines!      ";
         displayLandingPage(landingMessage);
     }
 
     private static void displayLandingPage(String message) {
-        Utils.frame(message.length() + 6);
+        Utils.frame(message.length());
         System.out.println("\n" + message + "\n");
-        Utils.frame(message.length() + 6);
+        Utils.frame(message.length());
         System.out.println("\nPress Enter to Continue");
         System.out.println("Press 1 to Exit.");
 

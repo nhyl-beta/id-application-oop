@@ -13,10 +13,18 @@ public class UserInterface {
     public void displayLoginPage() {
         while (true) {
             Utils.clearScreen();
-            System.out.println("\nLogin/Register Page");
+            
+            String titlePage = "      Login/Register Page      ";
+
+            Utils.frame(titlePage.length());
+            System.out.println("\n" + titlePage + "\n");
+            Utils.frame(titlePage.length());
+
+            System.out.println();
             System.out.println("1. Register");
             System.out.println("2. Login");
             System.out.println("3. Exit");
+            System.out.print("\nEnter the corresponding number to select: ");
 
             String option = sc.nextLine();
             switch (option) {
@@ -27,7 +35,7 @@ public class UserInterface {
                     login();
                     break;
                 case "3":
-                    System.out.println("Returning to the main menu...");
+                    System.out.println("Exiting the system....");
                     return;
                 default:
                     System.out.println("Invalid input. Please try again.");
@@ -36,21 +44,37 @@ public class UserInterface {
     }
 
     private void register() {
-        System.out.println("\n--- Registration ---");
+        Utils.clearScreen();
+        String registerTitle = "      Registration      ";
 
-        // Collecting user details with validation
-        System.out.print("Enter a unique username: ");
-        String username = sc.nextLine();
+        Utils.frame(registerTitle.length());
+        System.out.println("\n" + registerTitle + "\n");
+        Utils.frame(registerTitle.length());
+        System.out.println();
 
-        if (userDatabase.containsKey(username)) {
-            System.out.println("Username already exists. Try a different one.");
-            return;
+        
+        String username;
+        while (true) {
+            System.out.print("Enter a username: ");
+            username = sc.nextLine().trim();
+            
+            if (username.isEmpty()) {
+                System.out.println("Username cannot be blank. Please enter a valid username.");
+                continue;
+            }
+
+            if (userDatabase.containsKey(username)) {
+                System.out.println("Username already exists. Try a different one.");
+            } else {
+                break;
+            }
         }
 
+
         // Restricting name fields to alphabetic characters only
-        String lastName = getValidName("Enter your last name: ");
-        String firstName = getValidName("Enter your first name: ");
-        String middleName = getValidName("Enter your middle name: ");
+        String lastName = getValidName("Enter your Last name: ");
+        String firstName = getValidName("Enter your First name: ");
+        String middleName = getValidName("Enter your Middle name: ");
 
         // Restricting age input to integers only
         int age = getValidAge();
@@ -115,7 +139,14 @@ public class UserInterface {
     }
 
     private void login() {
-        System.out.println("\n--- Login ---");
+        Utils.clearScreen();
+        String loginTitle = "     Login     ";
+
+        Utils.frame(loginTitle.length());
+        System.out.println("\n" + loginTitle + "\n");
+        Utils.frame(loginTitle.length());
+        System.out.println();
+
         System.out.print("Enter your username: ");
         String username = sc.nextLine();
 
@@ -134,6 +165,7 @@ public class UserInterface {
 
         if (storedPassword.equals(password)) {
             System.out.println("Login successful! Welcome, " + username + "!");
+            new Dashboard().displayDashboard(username);
         } else {
             System.out.println("Incorrect password. Please try again.");
         }

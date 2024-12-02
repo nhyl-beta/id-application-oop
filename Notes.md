@@ -6,19 +6,19 @@ Nhyl
     
 
 Kristiane 
-    Landing Page 
+    Landing Page //done
         - self explinatory naman na
-    Login/Register Form
+    Login/Register Form //done
         - must have 3 options
 
         functions:
-            during register the accounts must be able to save from a text file or md file 
+            during register the accounts must be able to save from a text file or md file //done
 
-            during register phase it must not allow the special characters and the password must implement capital letter and number. example Abc123
+            during register phase it must not allow the special characters and the password must implement capital letter and number. example Abc123 //done
 
-            during login the function must search for the account wherein it must verify the username and password to be the same
+            during login the function must search for the account wherein it must verify the username and password to be the same //done
 
-            during the login if the input is invalid the output must say that the input is incorrect
+            during the login if the input is invalid the output must say that the input is incorrect //done
 
         suggestions: 
             create a class to separate login and register
