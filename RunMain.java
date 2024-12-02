@@ -28,6 +28,7 @@ public class RunMain{
         while (option!=null) {
             if (option.isEmpty()) {
                 clearScreen();
+                System.out.println("HALOO EBERYWAN");
             }
 
             if (sc.hasNextLine()) {
@@ -44,6 +45,7 @@ public class RunMain{
     }
     
     public static void main(String[] args){
+        clearScreen();
         String message = "     Welkam to the Philippines     ";
         landingPage(message);
 
