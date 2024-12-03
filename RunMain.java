@@ -10,6 +10,8 @@ public class RunMain {
     }
 
     private static void displayLandingPage(String message) {
+        Utils.clearScreen();
+        
         Utils.frame(message.length());
         System.out.println("\n" + message + "\n");
         Utils.frame(message.length());
@@ -23,6 +25,7 @@ public class RunMain {
                 new UserInterface().displayLoginPage();
                 break;
             } else if ("1".equals(option)) {
+                Utils.clearScreen();
                 System.out.println("Exiting program. Goodbye!");
                 System.exit(0);
             } else {
