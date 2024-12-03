@@ -16,7 +16,7 @@ public class Utils {
     // |          (Title)          |
     // |                           | 1
     // |---------------------------|
-
+    // mag focus ka dito sa mga lines ha pag di kaya mag sabi ka sakin
     // public void verticalFrame(){
             //TODO: dito mo lalagay tatanggalin mo yung comments thankyouuu
     // }

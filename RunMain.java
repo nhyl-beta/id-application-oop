@@ -4,14 +4,19 @@ public class RunMain {
     public static final Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
+        run();
+    }
+    
+    public static void run(){
         Utils.clearScreen();
         String landingMessage = "      Welcome to Philippines!      ";
         displayLandingPage(landingMessage);
+        
     }
 
     private static void displayLandingPage(String message) {
         Utils.clearScreen();
-        
+
         Utils.frame(message.length());
         System.out.println("\n" + message + "\n");
         Utils.frame(message.length());

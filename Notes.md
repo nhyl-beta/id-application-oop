@@ -61,7 +61,7 @@ Tentative
 
 EXAMPLE of display
 
-+ Landing Page
++ Landing Page (Nhyl)
 
 |---------------------------------------------------|
 |                                                   |
@@ -74,7 +74,7 @@ Press Enter to continue
 
 * -----Welcome to the Philippine I.D Application-----
 
-+ Login Page 
++ Login Page (Nhyl)
 |---------------------------------------------------|
 |                                                   |
 |   Press 1 to Login                                |
@@ -83,7 +83,7 @@ Press Enter to continue
 |                                                   |
 |---------------------------------------------------|
 
-+ Register Page
++ Register Page (Nhyl)
 
 |---------------------------------------------------|
 |                                                   |
@@ -93,7 +93,7 @@ Press Enter to continue
 |                                                   |
 |---------------------------------------------------|
 
-+ Dashboard Page
++ Dashboard Page (Nhyl)
 
 |---------------|------------------------------------|
 |               |                                    |
@@ -109,19 +109,21 @@ Press Enter to continue
 |               |                                    |
 |---------------|------------------------------------|
 
-+ Application Form
++ Application Form (Grace)
 
 |----------------------------------------------------|
 |                                                    |
 |                TITLE OF APPLICATION                | 
 |                                                    |
 |----------------------------------------------------|
-|                                                    |
-|    Last Name:                                      | 
-|                                                    |
-|    First Name:                                     |
-|                                                    
-|    Middle Name:                                    
-|                                                    
-|                                                    
-|                                                    
+                                                    
+    Last Name:                                       
+                                                    
+    First Name:                                     
+                                                    
+    Middle Name:                                    
+                                                    
+                                                    
+so on and so forth
+
+
