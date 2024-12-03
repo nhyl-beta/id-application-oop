@@ -23,8 +23,7 @@ public class Dashboard {
             String option = sc.nextLine();
             switch (option) {
                 case "1":
-                    System.out.println("\n--- Profile ---");
-                    System.out.println("Feature not implemented yet.");
+                    new Profile().displayProfilePage();
                     break;
                 case "2":
                     System.out.println("Logging out...");
