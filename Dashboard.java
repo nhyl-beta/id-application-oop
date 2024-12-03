@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class Dashboard {
-    public void displayDashboard(String username) {
+    public void displayDashboard(String firstName) {
         Utils.clearScreen();
 
         String dashboardTitle = "      Dashboard      ";
@@ -11,10 +11,11 @@ public class Dashboard {
         System.out.println("\n" + dashboardTitle + "\n");
         Utils.frame(dashboardTitle.length());
 
-        System.out.println("\nWelcome, " + username + "!");
-        System.out.println("1. View Profile");
-        System.out.println("2. Logout");
-        System.out.println("3. Exit");
+        System.out.println("\nWelcome, " + firstName + "!");
+
+        // System.out.println("1. View Profile");
+        // System.out.println("2. Logout");
+        // System.out.println("3. Exit");
 
         Scanner sc = RunMain.sc;
 
