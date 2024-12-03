@@ -140,7 +140,7 @@ public class UserInterface {
 
     private void login() {
         Utils.clearScreen();
-        String loginTitle = "     Login     ";
+        String loginTitle = "              Login              ";
 
         Utils.frame(loginTitle.length());
         System.out.println("\n" + loginTitle + "\n");
