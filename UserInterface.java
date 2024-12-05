@@ -53,16 +53,16 @@ public class UserInterface {
         Utils.displayFramedMessage("              Login              ");
     
         String username = Utils.getValidInput(
-                "Enter your username: ", 
-                input -> true, 
+                "Enter your username: ",
+                input -> true,
                 "Username cannot be empty."
         );
     
-        // If username is not found, ask to register or exit
         if (!userDatabase.containsKey(username)) {
             System.out.println("Username not found.");
             System.out.println("Press 1 to Register.");
-            System.out.println("Press 2 to Exit.");
+            System.out.println("Press 2 to Re-Login.");
+            System.out.println("Press 3 to Exit.");
     
             while (true) {
                 String choice = Utils.getValidInput(
@@ -73,15 +73,17 @@ public class UserInterface {
     
                 if (choice.equals("1")) {
                     register();
-                    return; // Exit login method after registering
+                    return;
                 } else if (choice.equals("2")) {
+                    login();
+                    return;
+                }else if (choice.equals("3")) {
                     System.out.println("Exiting to main menu...");
-                    return; // Exit login method
+                    return;
                 }
             }
         }
     
-        // Username found; proceed to password validation
         User user = userDatabase.get(username);
     
         String password = Utils.getValidInput(
@@ -91,45 +93,9 @@ public class UserInterface {
         );
     
         System.out.println("Login successful! Welcome, " + username + "!");
-        displayDashboard(user);
-    }
     
-
-    private void displayDashboard(User user) {
-        Utils.clearScreen();
-        Utils.displayFramedMessage("      Dashboard      ");
-
-        while (true) {
-            System.out.println("1. View Profile");
-            System.out.println("2. Logout");
-            System.out.println("3. Exit");
-            System.out.print("Your choice: ");
-            String choice = Main.sc.nextLine().trim();
-
-            switch (choice) {
-                case "1":
-                    displayProfile(user);
-                    break;
-                case "2":
-                    System.out.println("Logging out...");
-                    return;
-                case "3":
-                    System.out.println("Exiting program. Goodbye!");
-                    Utils.saveUsers(userDatabase);
-                    System.exit(0);
-                    break;
-                default:
-                    System.out.println("Invalid input. Please try again.");
-            }
-        }
-    }
-
-    private void displayProfile(User user) {
-        Utils.clearScreen();
-        Utils.displayFramedMessage("      Profile      ");
-        System.out.println("Username: " + user.getUsername());
-        System.out.println("Name: " + user.getFirstName() + "");
-        System.out.println("Age: " + user.getAge());
-        System.out.println("Phone: " + user.getPhoneNumber());
+        
+        Dashboard dashboard = new Dashboard(userDatabase);
+        dashboard.displayDashboard(user);
     }
 }
