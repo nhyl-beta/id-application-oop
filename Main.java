@@ -10,5 +10,9 @@ public class Main {
         //Main function to run the entire system
         idRun.run();
         
+
+        //test run
+        // Utils.clearScreen();
+        // db.run();
     }
 }
