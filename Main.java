@@ -6,17 +6,16 @@ public class Main {
 
     public static void main(String[] args) {
         IdSystem idRun = new IdSystem();
+        //Dashboard db = new Dashboard();
+
+
 
         //Main function to run the entire system
         idRun.run();
         
 
         //test run
-<<<<<<< HEAD
         // Utils.clearScreen();
-=======
-        // Util.clearScreen();
->>>>>>> test-ver
-        // db.run();
+        // db.displayDashboard();
     }
 }
