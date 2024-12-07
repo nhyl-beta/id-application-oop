@@ -12,9 +12,25 @@ public class Utils {
     }
 
     public static void displayFramedMessage(String message) {
-        System.out.println("-".repeat(message.length()));
-        System.out.println(message);
-        System.out.println("-".repeat(message.length()));
+        int totalWidth = 70; // Set the total width of the frame
+        int messageLength = message.length();
+        
+        if (messageLength > totalWidth) {
+            System.out.println("Message is too long to fit in the frame.");
+            return;
+        }
+    
+        int padding = (totalWidth - messageLength) / 2;
+        String paddedMessage = " ".repeat(padding) + message + " ".repeat(padding);
+    
+        // Add extra space if totalWidth is odd and messageLength is even (or vice versa)
+        if ((totalWidth - messageLength) % 2 != 0) {
+            paddedMessage += " ";
+        }
+    
+        System.out.println("-".repeat(totalWidth));
+        System.out.println(paddedMessage);
+        System.out.println("-".repeat(totalWidth));
     }
 
     public static String getValidInput(String prompt, Predicate<String> validator, String errorMessage) {

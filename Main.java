@@ -12,7 +12,11 @@ public class Main {
         
 
         //test run
+<<<<<<< HEAD
         // Utils.clearScreen();
+=======
+        // Util.clearScreen();
+>>>>>>> test-ver
         // db.run();
     }
 }
