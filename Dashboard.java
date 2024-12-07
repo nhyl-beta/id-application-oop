@@ -17,7 +17,8 @@ public class Dashboard {
     }
 
     private static void displayMenu() {
-        System.out.println("Dashboard");
+        Utils.clearScreen();
+        Utils.displayFramedMessage("Dashboard");
         System.out.println("Press the corresponding number to proceed to the ID application form.");
         System.out.println("1 for Postal ID");
         System.out.println("2 for Barangay ID");
