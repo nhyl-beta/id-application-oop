@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         IdSystem idRun = new IdSystem();
-        //Dashboard db = new Dashboard();
+        Dashboard db = new Dashboard(null);
 
 
 
@@ -16,6 +16,6 @@ public class Main {
 
         //test run
         // Utils.clearScreen();
-        // db.displayDashboard();
+        //db.displayDashboard(null);
     }
 }
