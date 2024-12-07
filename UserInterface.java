@@ -38,7 +38,9 @@ public class UserInterface {
         String username = Utils.getValidInput("Enter a username: ", input -> !input.isEmpty() && !userDatabase.containsKey(input), "Invalid username or already exists.");
         String lastName = Utils.getValidName("Enter your Last name: ");
         String firstName = Utils.getValidName("Enter your First name: ");
-        String middleName = Utils.getValidName("Enter your Middle name: ");
+        String middleName = Utils.getValidInput("Enter your Middle name (optional, press Enter to skip): ",
+            input -> true,  // Always valid
+            "");
         int age = Utils.getValidInteger("Enter your age: ", i -> i > 0, "Invalid age. Please enter a positive number.");
         String phoneNumber = Utils.getValidInput("Enter your phone number (11 digits, starting with 09): ", Utils::isValidPhoneNumber, "Invalid phone number.");
         String password = Utils.getValidInput("Enter a password: ", input -> !input.isEmpty(), "Password cannot be empty.");
