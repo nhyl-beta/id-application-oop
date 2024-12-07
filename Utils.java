@@ -2,6 +2,7 @@
 import java.io.*;
 import java.util.HashMap;
 import java.util.function.Predicate;
+import java.io.Console;
 
 public class Utils {
     private static final String DATABASE_FILE = "userDatabase.txt";
@@ -123,6 +124,47 @@ public class Utils {
             }
         } catch (IOException e) {
             System.out.println("Error saving user database: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Reads a password from the user while displaying asterisks for each character.
+     *
+     * @param prompt The prompt to display to the user.
+     * @return The password entered by the user.
+     */
+    public static String getPasswordInput(String prompt) {
+        Console console = System.console();
+
+        if (console != null) {
+            // Use the console's built-in password masking
+            System.out.print(prompt);
+            char[] passwordChars = console.readPassword();
+            return new String(passwordChars);
+        } else {
+            // Fallback for environments without a console
+            System.out.print(prompt);
+            StringBuilder password = new StringBuilder();
+            try {
+                while (true) {
+                    char input = (char) System.in.read();
+                    if (input == '\n' || input == '\r') {
+                        // Enter key ends input
+                        break;
+                    } else if (input == '\b' && password.length() > 0) {
+                        // Handle backspace
+                        password.deleteCharAt(password.length() - 1);
+                        System.out.print("\b \b"); // Erase a character on the console
+                    } else {
+                        password.append(input);
+                        System.out.print("*"); // Display asterisk for each character
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("\nError reading password: " + e.getMessage());
+            }
+            System.out.println(); // Move to the next line
+            return password.toString();
         }
     }
 

@@ -56,48 +56,26 @@ public class UserInterface {
     
         String username = Utils.getValidInput(
                 "Enter your username: ",
-                input -> true,
+                input -> !input.isEmpty(),
                 "Username cannot be empty."
         );
     
         if (!userDatabase.containsKey(username)) {
             System.out.println("Username not found.");
-            System.out.println("Press 1 to Register.");
-            System.out.println("Press 2 to Re-Login.");
-            System.out.println("Press 3 to Exit.");
-    
-            while (true) {
-                String choice = Utils.getValidInput(
-                        "Your choice: ",
-                        input -> input.equals("1") || input.equals("2"),
-                        "Invalid input. Please press 1 or 2."
-                );
-    
-                if (choice.equals("1")) {
-                    register();
-                    return;
-                } else if (choice.equals("2")) {
-                    login();
-                    return;
-                }else if (choice.equals("3")) {
-                    System.out.println("Exiting to main menu...");
-                    return;
-                }
-            }
+            return;
         }
     
         User user = userDatabase.get(username);
     
-        String password = Utils.getValidInput(
-                "Enter your password: ",
-                input -> input.equals(user.getPassword()),
-                "Incorrect password. Please try again."
-        );
+        String password = Utils.getPasswordInput("Enter your password: ");
+        if (!password.equals(user.getPassword())) {
+            System.out.println("Incorrect password. Please try again.");
+            return;
+        }
     
         System.out.println("Login successful! Welcome, " + username + "!");
-    
-        
         Dashboard dashboard = new Dashboard(userDatabase);
         dashboard.displayDashboard(user);
     }
+        
 }

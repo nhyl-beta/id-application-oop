@@ -9,7 +9,6 @@ public class Dashboard {
         this.userDatabase = userDatabase;
     }
 
-    // Updated displayDashboard method to accept a User parameter
     public void displayDashboard(User user) {
         try {
             displayMenu();
@@ -34,13 +33,13 @@ public class Dashboard {
     private void userEntry(String entry, User user) {
         switch (entry) {
             case "1":
-                showPostalForm(user);  // Pass user to the form
+                showPostalForm(user);
                 break;
             case "2":
-                showBarangayForm(user);  // Pass user to the form
+                showBarangayForm(user);
                 break;
             case "3":
-                showCompanyForm(user);  // Pass user to the form
+                showCompanyForm(user);
                 break;
             case "E":
                 System.out.println("Exiting the system. Thank you!");
@@ -51,31 +50,32 @@ public class Dashboard {
     }
 
     private void showPostalForm(User user) {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("Postal ID Application Form");
         System.out.println("You selected Postal ID. Please fill out the Postal ID application form.");
         
-        String lastName = getUpdatedValue("Last Name", user.getLastName());
-        String firstName = getUpdatedValue("First Name", user.getFirstName());
-        String middleName = getUpdatedValue("Middle Name", user.getMiddleName());
-        int age = getUpdatedInteger("Age", user.getAge());
-        String phoneNumber = getUpdatedValue("Phone Number", user.getPhoneNumber());
-    
-        // Continue with the rest of the form (e.g., address collection).
+        String lastName = getUpdatedValue("Last Name", user.getLastName(), user, "lastName");
+        String firstName = getUpdatedValue("First Name", user.getFirstName(), user, "firstName");
+        String middleName = getUpdatedValue("Middle Name", user.getMiddleName(), user, "middleName");
+        int age = getUpdatedInteger("Age", user.getAge(), user, "age");
+        String phoneNumber = getUpdatedValue("Phone Number", user.getPhoneNumber(), user, "phoneNumber");
     }
-    
+
     private void showBarangayForm(User user) {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("Barangay ID Application Form");
         System.out.println("You selected Barangay ID. Please fill out the Barangay ID application form.");
-    
-        String lastName = getUpdatedValue("Last Name", user.getLastName());
-        String firstName = getUpdatedValue("First Name", user.getFirstName());
-        String middleName = getUpdatedValue("Middle Name", user.getMiddleName());
-        int age = getUpdatedInteger("Age", user.getAge());
-        String phoneNumber = getUpdatedValue("Phone Number", user.getPhoneNumber());
-    
-        // Additional form details
+
+        String lastName = getUpdatedValue("Last Name", user.getLastName(), user, "lastName");
+        String firstName = getUpdatedValue("First Name", user.getFirstName(), user, "firstName");
+        String middleName = getUpdatedValue("Middle Name", user.getMiddleName(), user, "middleName");
+        int age = getUpdatedInteger("Age", user.getAge(), user, "age");
+        String phoneNumber = getUpdatedValue("Phone Number", user.getPhoneNumber(), user, "phoneNumber");
     }
-    
 
     private void showCompanyForm(User user) {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("Company ID Application Form");
         System.out.println("You selected Company ID. Please fill out the Company ID application form.");
         System.out.println("Automatically filled data:");
         System.out.println("Last Name: " + user.getLastName());
@@ -86,25 +86,53 @@ public class Dashboard {
         // Continue the form collection
     }
 
-    private String getUpdatedValue(String fieldName, String currentValue) {
+    private String getUpdatedValue(String fieldName, String currentValue, User user, String userField) {
         System.out.println(fieldName + " (" + currentValue + "): Would you like to change it? (Y/N)");
         String choice = Main.sc.nextLine().trim().toUpperCase();
-    
+
         if ("Y".equals(choice)) {
-            return Utils.getValidInput("Enter new " + fieldName + ": ", input -> !input.isEmpty(), fieldName + " cannot be empty.");
+            String newValue = Utils.getValidInput("Enter new " + fieldName + ": ", input -> !input.isEmpty(), fieldName + " cannot be empty.");
+            updateUserField(user, userField, newValue); // Update the user field dynamically
+            Utils.updateUserInDatabase(user, userDatabase); // Persist changes to the database
+            return newValue;
         } else {
             return currentValue; // Retain the current value
         }
     }
-    
-    private int getUpdatedInteger(String fieldName, int currentValue) {
+
+    private int getUpdatedInteger(String fieldName, int currentValue, User user, String userField) {
         System.out.println(fieldName + " (" + currentValue + "): Would you like to change it? (Y/N)");
         String choice = Main.sc.nextLine().trim().toUpperCase();
-    
+
         if ("Y".equals(choice)) {
-            return Utils.getValidInteger("Enter new " + fieldName + ": ", i -> i > 0, fieldName + " must be a positive number.");
+            int newValue = Utils.getValidInteger("Enter new " + fieldName + ": ", i -> i > 0, fieldName + " must be a positive number.");
+            updateUserField(user, userField, newValue); // Update the user field dynamically
+            Utils.updateUserInDatabase(user, userDatabase); // Persist changes to the database
+            return newValue;
         } else {
             return currentValue; // Retain the current value
+        }
+    }
+
+    private void updateUserField(User user, String fieldName, Object newValue) {
+        switch (fieldName) {
+            case "lastName":
+                user.setLastName((String) newValue);
+                break;
+            case "firstName":
+                user.setFirstName((String) newValue);
+                break;
+            case "middleName":
+                user.setMiddleName((String) newValue);
+                break;
+            case "age":
+                user.setAge((int) newValue);
+                break;
+            case "phoneNumber":
+                user.setPhoneNumber((String) newValue);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown field: " + fieldName);
         }
     }
 }

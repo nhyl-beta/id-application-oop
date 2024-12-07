@@ -1,12 +1,13 @@
 public class User {
-    private final String username;
-    private final String lastName;
-    private final String firstName;
-    private final String middleName;
-    private final String phoneNumber;
-    private final String password;
-    private final int age;
+    private String username;
+    private String lastName;
+    private String firstName;
+    private String middleName;
+    private int age;
+    private String phoneNumber;
+    private String password;
 
+    // Constructor
     public User(String username, String lastName, String firstName, String middleName, int age, String phoneNumber, String password) {
         this.username = username;
         this.lastName = lastName;
@@ -17,6 +18,7 @@ public class User {
         this.password = password;
     }
 
+    // Getters
     public String getUsername() {
         return username;
     }
@@ -45,38 +47,37 @@ public class User {
         return password;
     }
 
-    /**
-     * Creates a new User instance with an updated last name.
-     */
-    public User withLastName(String newLastName) {
-        return new User(username, newLastName, firstName, middleName, age, phoneNumber, password);
+    // Setters (Add these methods)
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    /**
-     * Creates a new User instance with an updated first name.
-     */
-    public User withFirstName(String newFirstName) {
-        return new User(username, lastName, newFirstName, middleName, age, phoneNumber, password);
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    /**
-     * Creates a new User instance with an updated middle name.
-     */
-    public User withMiddleName(String newMiddleName) {
-        return new User(username, lastName, firstName, newMiddleName, age, phoneNumber, password);
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
     }
 
-    /**
-     * Creates a new User instance with an updated age.
-     */
-    public User withAge(int newAge) {
-        return new User(username, lastName, firstName, middleName, newAge, phoneNumber, password);
+    public void setAge(int age) {
+        this.age = age;
     }
 
-    /**
-     * Creates a new User instance with an updated phone number.
-     */
-    public User withPhoneNumber(String newPhoneNumber) {
-        return new User(username, lastName, firstName, middleName, age, newPhoneNumber, password);
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    // Additional utility methods (optional)
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", age=" + age +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
