@@ -1,6 +1,9 @@
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dashboard {
+
+    private final static List<String> finalizedDetails = new ArrayList<>();
 
     public void run() {
         try {
@@ -15,13 +18,10 @@ public class Dashboard {
             }
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
-        } finally {
-            Main.sc.close();
         }
     }
 
     private static void displayMenu() {
-        Utils.clearScreen();
         Utils.displayFramedMessage("Dashboard");
         System.out.println("Press the corresponding number to proceed to the ID application form.");
         System.out.println("1 for Postal ID");
@@ -35,7 +35,6 @@ public class Dashboard {
         switch (entry) {
             case "1":
                 showPostalForm();
-                displayPostalDetails(null, entry, entry, entry);
                 break;
             case "2":
                 showBarangayForm();
@@ -58,6 +57,7 @@ public class Dashboard {
 
         if (editApplicationDetails(user, new String[]{address, validDate, nationality})) {
             displayPostalDetails(user, address, validDate, nationality);
+            addFinalizedDetails("Postal ID", user, address, validDate, nationality);
             displayFinalDetails("Postal ID", user, address, validDate, nationality);
         }
     }
@@ -76,6 +76,8 @@ public class Dashboard {
 
         if (editApplicationDetails(user, new String[]{address, validDate, contactNumber, sex, civilStatus}, emergencyDetails)) {
             displayBarangayDetails(user, address, validDate, contactNumber, sex, civilStatus, emergencyDetails);
+            addFinalizedDetails("Barangay ID", user, address, validDate, contactNumber, sex, civilStatus, 
+                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
             displayFinalDetails("Barangay ID", user, address, validDate, contactNumber, sex, civilStatus, 
                                 emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
         }
@@ -93,8 +95,51 @@ public class Dashboard {
 
         if (editApplicationDetails(user, new String[]{address, tin, philHealth, pagIbig}, emergencyDetails)) {
             displayCompanyDetails(user, address, tin, philHealth, pagIbig, emergencyDetails);
+            addFinalizedDetails("Company ID", user, address, tin, philHealth, pagIbig, 
+                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
             displayFinalDetails("Company ID", user, address, tin, philHealth, pagIbig, 
                                 emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
+        }
+    }
+    
+    private static void addFinalizedDetails(String formType, User user, String... details) {
+        StringBuilder finalizedDetail = new StringBuilder();
+        finalizedDetail.append("\n--- Finalized Details ---\n");
+        finalizedDetail.append("Form Type: ").append(formType).append("\n");
+        finalizedDetail.append("Name: ").append(user.getFirstName()).append(" ")
+                .append(user.getMiddleName()).append(" ").append(user.getLastName()).append("\n");
+        finalizedDetail.append("Age: ").append(user.getAge()).append("\n");
+        finalizedDetail.append("Phone Number: ").append(user.getPhoneNumber()).append("\n");
+        for (String detail : details) {
+            finalizedDetail.append(detail).append("\n");
+        }
+        finalizedDetails.add(finalizedDetail.toString());
+    }
+
+    private static void displayFinalDetails(String formType, User user, String... details) {
+        Utils.displayFramedMessage("Finalized Details");
+        System.out.println("Form Type: " + formType);
+        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
+        System.out.printf("Age: %d%n", user.getAge());
+        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
+        for (String detail : details) {
+            System.out.println(detail);
+        }
+
+        while (true) {
+            System.out.println("\nOptions:");
+            System.out.println("1. Return to Dashboard");
+            System.out.println("2. Exit");
+            System.out.print("Enter your choice: ");
+            String choice = Main.sc.nextLine().trim();
+            if ("1".equals(choice)) {
+                return; // Return to the main menu
+            } else if ("2".equals(choice)) {
+                System.out.println("Exiting the system. Thank you!");
+                System.exit(0); // Exit the application
+            } else {
+                System.out.println("Invalid choice. Please select 1 or 2.");
+            }
         }
     }
 
@@ -129,9 +174,7 @@ public class Dashboard {
         String firstName = Utils.getValidName("Enter your First Name: ");
         String middleName = Utils.getValidName("Enter your Middle Name: ");
         String lastName = Utils.getValidName("Enter your Last Name: ");
-        System.out.print("Enter Age: ");
         int age = Utils.getValidInteger("Enter Age: ", a -> a > 0, "Age must be a positive number.");
-        System.out.print("Enter Phone Number: ");
         String phoneNumber = Utils.getValidInput("Enter your contact number (11 digits, starting with 09): ", Utils::isValidPhoneNumber, "Invalid phone number.");
 
         return new User("", lastName, firstName, middleName, age, phoneNumber, "");
@@ -204,16 +247,4 @@ public class Dashboard {
         System.out.printf("  Contact Number: %s%n", emergencyDetails[1]);
         System.out.printf("  Relationship: %s%n", emergencyDetails[2]);
     }
-
-    public static void displayFinalDetails(String formType, User user, String... details) {
-        System.out.println("\n--- Finalized Details ---");
-        System.out.println("Form Type: " + formType);
-        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.printf("Age: %d%n", user.getAge());
-        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
-        for (String detail : details) {
-            System.out.println(detail);
-        }
-    }
-
 }
