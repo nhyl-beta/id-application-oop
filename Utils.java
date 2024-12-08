@@ -4,6 +4,8 @@ import java.util.function.Predicate;
 
 public class Utils {
     private static final String DATABASE_FILE = "userDatabase.txt";
+    private static final int TOTALWIDTH = 70;
+    
 
     public static void clearScreen() {
         System.out.print("\033[H\033[2J");
@@ -11,27 +13,26 @@ public class Utils {
     }
 
     public static void displayFramedMessage(String message) {
-        int totalWidth = 70; // Set the total width of the frame
         int messageLength = message.length();
         
-        if (messageLength > totalWidth) {
+        if (messageLength > TOTALWIDTH) {
             System.out.println("Message is too long to fit in the frame.");
             return;
         }
     
-        int padding = (totalWidth - messageLength) / 2;
+        int padding = (TOTALWIDTH - messageLength) / 2;
         String paddedMessage = " ".repeat(padding) + message + " ".repeat(padding);
     
-        // Add extra space if totalWidth is odd and messageLength is even (or vice versa)
-        if ((totalWidth - messageLength) % 2 != 0) {
+        // Add extra space if TOTALWIDTH is odd and messageLength is even (or vice versa)
+        if ((TOTALWIDTH - messageLength) % 2 != 0) {
             paddedMessage += " ";
         }
     
-        System.out.println("-".repeat(totalWidth));
+        System.out.println("-".repeat(TOTALWIDTH));
         System.out.println();
         System.out.println(paddedMessage);
         System.out.println();
-        System.out.println("-".repeat(totalWidth));
+        System.out.println("-".repeat(TOTALWIDTH));
     }
 
     public static String getValidInput(String prompt, Predicate<String> validator, String errorMessage) {

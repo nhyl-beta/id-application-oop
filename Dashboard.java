@@ -1,18 +1,15 @@
-import java.util.Scanner;
-
 public class Dashboard {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public void run() {
 
         try {
             displayMenu();
-            String entry = sc.nextLine().trim().toUpperCase();
-            userEntry(entry, sc);
+            String entry = Main.sc.nextLine().trim().toUpperCase();
+            userEntry(entry);
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
         } finally {
-            sc.close();
+            Main.sc.close();
         }
     }
 
@@ -27,16 +24,16 @@ public class Dashboard {
         System.out.print("Enter your choice: ");
     }
 
-    private static void userEntry(String entry, Scanner sc) {
+    private static void userEntry(String entry) {
         switch (entry) {
             case "1":
-                showPostalForm(sc);
+                showPostalForm();
                 break;
             case "2":
-                showBarangayForm(sc);
+                showBarangayForm();
                 break;
             case "3":
-                showCompanyForm(sc);
+                showCompanyForm();
                 break;
             case "E":
                 System.out.println("Exiting the system. Thank you!");
@@ -46,20 +43,17 @@ public class Dashboard {
         }
     }
 
-    private static void showPostalForm(Scanner sc) {
+    private static void showPostalForm() {
         System.out.println("You selected Postal ID. Please fill out the Postal ID application form.");
 
-        System.out.print("Enter First Name: ");
-        String firstName = sc.nextLine(); 
+        String firstName = Utils.getValidName("Enter your First Name: "); 
 
-        System.out.print("Enter Middle Name: ");
-        String middleName = sc.nextLine(); 
+        String middleName = Utils.getValidName("Enter your Middle Name: "); 
 
-        System.out.print("Enter Surname: ");
-        String surname = sc.nextLine(); 
+        String lastName = Utils.getValidName("Enter your Last Name: "); 
 
         System.out.print("Enter Suffix (e.g., Jr., Sr., etc.): ");
-        String suffix = sc.nextLine();
+        String suffix = Main.sc.nextLine();
 
         System.out.print("Enter Address: ");
         String address = sc.nextLine(); 
@@ -71,7 +65,7 @@ public class Dashboard {
         String nationality = sc.nextLine(); 
         
         System.out.println("\n--- Postal ID Details ---");
-        System.out.println("Name: " + firstName + " " + middleName + " " + surname + " " + suffix);
+        System.out.println("Name: " + firstName + " " + middleName + " " + lastName + " " + suffix);
         System.out.println("Address: " + address);
         System.out.println("Date of Birth: " + dateOfBirth);
         System.out.println("Nationality: " + nationality);
