@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Dashboard {
 
     public void run() {
@@ -33,6 +35,7 @@ public class Dashboard {
         switch (entry) {
             case "1":
                 showPostalForm();
+                displayPostalDetails(null, entry, entry, entry);
                 break;
             case "2":
                 showBarangayForm();
@@ -53,7 +56,10 @@ public class Dashboard {
         String validDate = Utils.getValidDate("Enter your date of birth (MM-DD-YYYY): ");
         String nationality = Utils.isValidString("Enter your Nationality: ");
 
-        displayPostalDetails(user, address, validDate, nationality);
+        if (editApplicationDetails(user, new String[]{address, validDate, nationality})) {
+            displayPostalDetails(user, address, validDate, nationality);
+            displayFinalDetails("Postal ID", user, address, validDate, nationality);
+        }
     }
 
     private static void showBarangayForm() {
@@ -68,7 +74,11 @@ public class Dashboard {
         String civilStatus = Main.sc.nextLine();
         String[] emergencyDetails = getEmergencyDetails();
 
-        displayBarangayDetails(user, address, validDate, contactNumber, sex, civilStatus, emergencyDetails);
+        if (editApplicationDetails(user, new String[]{address, validDate, contactNumber, sex, civilStatus}, emergencyDetails)) {
+            displayBarangayDetails(user, address, validDate, contactNumber, sex, civilStatus, emergencyDetails);
+            displayFinalDetails("Barangay ID", user, address, validDate, contactNumber, sex, civilStatus, 
+                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
+        }
     }
 
     private static void showCompanyForm() {
@@ -81,7 +91,11 @@ public class Dashboard {
         String pagIbig = Utils.getValidInput("Enter Pag-IBIG Number: ", Utils::isValidPagIbig, "Invalid Pag-IBIG number.");
         String[] emergencyDetails = getEmergencyDetails();
 
-        displayCompanyDetails(user, address, tin, philHealth, pagIbig, emergencyDetails);
+        if (editApplicationDetails(user, new String[]{address, tin, philHealth, pagIbig}, emergencyDetails)) {
+            displayCompanyDetails(user, address, tin, philHealth, pagIbig, emergencyDetails);
+            displayFinalDetails("Company ID", user, address, tin, philHealth, pagIbig, 
+                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
+        }
     }
 
     private static User autofillOrManual() {
@@ -107,7 +121,6 @@ public class Dashboard {
                 System.out.println("User not found. Switching to manual entry.");
             }
         }
-    
         System.out.println("Please enter your details manually:");
         return createUserManually();
     }
@@ -134,43 +147,73 @@ public class Dashboard {
         return new String[]{emergencyName, emergencyContact, relationship};
     }
 
-    private static void displayPostalDetails(User user, String address, String validDate, String nationality) {
-        System.out.println("\n--- Postal ID Details ---");
+    private static boolean editApplicationDetails(User user, String[] mainDetails, String... optionalDetails) {
+        System.out.println("\nReview your details:");
         System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.println("Age: " + user.getAge());
-        System.out.println("Phone Number: " + user.getPhoneNumber());
-        System.out.println("Address: " + address);
-        System.out.println("Date of Birth: " + validDate);
-        System.out.println("Nationality: " + nationality);
+        System.out.printf("Age: %d%n", user.getAge());
+        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
+
+        for (String detail : mainDetails) {
+            System.out.println(detail);
+        }
+        if (optionalDetails.length > 0) {
+            System.out.println("Emergency Details:");
+            System.out.println("  Name: " + optionalDetails[0]);
+            System.out.println("  Contact Number: " + optionalDetails[1]);
+            System.out.println("  Relationship: " + optionalDetails[2]);
+        }
+
+        System.out.print("Would you like to edit any information? (y/n): ");
+        String choice = Main.sc.nextLine().trim().toLowerCase();
+        return !choice.equals("y");
     }
 
-    private static void displayBarangayDetails(User user, String address, String validDate, String contactNumber, String sex, String civilStatus, String[] emergencyDetails) {
-        System.out.println("\n--- Barangay Gaya-Gaya Resident ID Details ---");
+    public static void displayPostalDetails(User user, String address, String validDate, String nationality) {
+        System.out.println("\n--- Postal Details ---");
         System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.println("Age: " + user.getAge());
-        System.out.println("Phone Number: " + contactNumber);
-        System.out.println("Address: " + address);
-        System.out.println("Date of Birth: " + validDate);
-        System.out.println("Sex: " + sex);
-        System.out.println("Civil Status: " + civilStatus);
-        System.out.println("In Case of Emergency:");
-        System.out.println("  Name: " + emergencyDetails[0]);
-        System.out.println("  Contact Number: " + emergencyDetails[1]);
-        System.out.println("  Relationship: " + emergencyDetails[2]);
+        System.out.printf("Address: %s%n", address);
+        System.out.printf("Date of Birth: %s%n", validDate);
+        System.out.printf("Nationality: %s%n", nationality);
     }
 
-    private static void displayCompanyDetails(User user, String address, String tin, String philHealth, String pagIbig, String[] emergencyDetails) {
-        System.out.println("\n--- Company ID Details ---");
+    public static void displayBarangayDetails(User user, String address, String validDate, String contactNumber,
+                                              String sex, String civilStatus, String[] emergencyDetails) {
+        System.out.println("\n--- Barangay Details ---");
         System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.println("Age: " + user.getAge());
-        System.out.println("Phone Number: " + user.getPhoneNumber());
-        System.out.println("Address: " + address);
-        System.out.println("TIN: " + tin);
-        System.out.println("PhilHealth Number: " + philHealth);
-        System.out.println("Pag-IBIG Number: " + pagIbig);
-        System.out.println("In Case of Emergency:");
-        System.out.println("  Name: " + emergencyDetails[0]);
-        System.out.println("  Contact Number: " + emergencyDetails[1]);
-        System.out.println("  Relationship: " + emergencyDetails[2]);
+        System.out.printf("Address: %s%n", address);
+        System.out.printf("Date of Birth: %s%n", validDate);
+        System.out.printf("Contact Number: %s%n", contactNumber);
+        System.out.printf("Gender: %s%n", sex);
+        System.out.printf("Civil Status: %s%n", civilStatus);
+        System.out.println("Emergency Contact:");
+        System.out.printf("  Name: %s%n", emergencyDetails[0]);
+        System.out.printf("  Contact Number: %s%n", emergencyDetails[1]);
+        System.out.printf("  Relationship: %s%n", emergencyDetails[2]);
     }
+
+    public static void displayCompanyDetails(User user, String address, String tin, String philHealth,
+                                             String pagIbig, String[] emergencyDetails) {
+        System.out.println("\n--- Company Details ---");
+        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
+        System.out.printf("Address: %s%n", address);
+        System.out.printf("TIN: %s%n", tin);
+        System.out.printf("PhilHealth Number: %s%n", philHealth);
+        System.out.printf("Pag-IBIG Number: %s%n", pagIbig);
+        System.out.println("Emergency Contact:");
+        System.out.printf("  Name: %s%n", emergencyDetails[0]);
+        System.out.printf("  Contact Number: %s%n", emergencyDetails[1]);
+        System.out.printf("  Relationship: %s%n", emergencyDetails[2]);
+    }
+
+    public static void displayFinalDetails(String formType, User user, String... details) {
+        System.out.println("\n--- Finalized Details ---");
+        System.out.println("Form Type: " + formType);
+        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
+        System.out.printf("Age: %d%n", user.getAge());
+        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
+        for (String detail : details) {
+            System.out.println(detail);
+        }
+    }
+
 }
