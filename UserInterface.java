@@ -53,10 +53,10 @@ public class UserInterface {
         Utils.displayFramedMessage("              Login              ");
     
         String username = Utils.getValidInput(
-                "Enter your username: ", 
-                input -> true, 
+                "Enter your username: ",
+                input -> !input.isEmpty(),
                 "Username cannot be empty."
-        );
+        ).toLowerCase(); // Convert input to lowercase for case-insensitivity
     
         // If username is not found, ask to register or exit
         if (!userDatabase.containsKey(username)) {
@@ -101,8 +101,9 @@ public class UserInterface {
 
         while (true) {
             System.out.println("1. View Profile");
-            System.out.println("2. Logout");
-            System.out.println("3. Exit");
+            System.out.println("2. Forms");
+            System.out.println("3. Logout");
+            System.out.println("4. Exit");
             System.out.print("Your choice: ");
             String choice = Main.sc.nextLine().trim();
 
@@ -111,9 +112,13 @@ public class UserInterface {
                     displayProfile(user);
                     break;
                 case "2":
+                    Dashboard db = new Dashboard();
+                    db.run();
+                    break;
+                case "3":
                     System.out.println("Logging out...");
                     return;
-                case "3":
+                case "4":
                     System.out.println("Exiting program. Goodbye!");
                     Utils.saveUsers(userDatabase);
                     System.exit(0);
