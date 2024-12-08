@@ -4,7 +4,7 @@ public class IdSystem {
     //Initial method to run the system
     public void run() {
         Utils.clearScreen();
-        String landingMessage = "      Welcome to Philippines!      ";
+        String landingMessage = "Welcome to the ID Registration Portal!";
         Utils.displayFramedMessage(landingMessage);
         displayLandingMenu();
     }
@@ -12,7 +12,7 @@ public class IdSystem {
     private void displayLandingMenu() {
         while (true) {
             System.out.println("Press Enter to Continue");
-            System.out.println("Press 1 to Exit.");
+            System.out.println("Press 1 to Exit");
             String option = Main.sc.nextLine().trim();
 
             if (option.isEmpty()) {
@@ -21,7 +21,7 @@ public class IdSystem {
                 break;
             } else if ("1".equals(option)) {
                 Utils.clearScreen();
-                System.out.println("Exiting program. Goodbye!");
+                System.out.println("Exiting the system. Have a great day!");
                 System.exit(0);
             } else {
                 System.out.println("Invalid input. Please try again.");

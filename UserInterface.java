@@ -8,10 +8,10 @@ public class UserInterface {
             Utils.clearScreen();
             Utils.displayFramedMessage("      Login/Register Page      ");
 
-            System.out.println("1. Register");
-            System.out.println("2. Login");
+            System.out.println("1. Create Account");
+            System.out.println("2. Sign In");
             System.out.println("3. Exit");
-            System.out.print("Your choice: ");
+            System.out.print("Please select an option: ");
             String choice = Main.sc.nextLine().trim();
 
             switch (choice) {
@@ -104,7 +104,7 @@ public class UserInterface {
             System.out.println("2. Forms");
             System.out.println("3. Logout");
             System.out.println("4. Exit");
-            System.out.print("Your choice: ");
+            System.out.print("Please select an option: ");
             String choice = Main.sc.nextLine().trim();
 
             switch (choice) {

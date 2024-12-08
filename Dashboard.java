@@ -11,7 +11,7 @@ public class Dashboard {
                 displayMenu();
                 String entry = Main.sc.nextLine().trim().toUpperCase();
                 if ("E".equals(entry)) {
-                    System.out.println("Exiting the system. Thank you!");
+                    System.out.println("Exiting the system. Have a great day!");
                     break;
                 }
                 handleUserEntry(entry);
@@ -22,13 +22,14 @@ public class Dashboard {
     }
 
     private static void displayMenu() {
+        Utils.clearScreen();
         Utils.displayFramedMessage("Dashboard");
         System.out.println("Press the corresponding number to proceed to the ID application form.");
         System.out.println("1 for Postal ID");
         System.out.println("2 for Barangay ID");
         System.out.println("3 for Company ID");
         System.out.println("Press E to Exit");
-        System.out.print("Enter your choice: ");
+        System.out.print("Please select an option: ");
     }
 
     private static void handleUserEntry(String entry) {
@@ -43,17 +44,19 @@ public class Dashboard {
                 showCompanyForm();
                 break;
             default:
-                System.out.println("Invalid choice. Please select 1, 2, 3, or E.");
+                System.out.println("Invalid entry. Please select 1, 2, 3, or E.");
         }
     }
 
     private static void showPostalForm() {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("POSTAL ID");
         System.out.println("You selected Postal ID. Please fill out the Postal ID application form.");
         User user = autofillOrManual();
         System.out.print("Enter Address: ");
         String address = Main.sc.nextLine();
         String validDate = Utils.getValidDate("Enter your date of birth (MM-DD-YYYY): ");
-        String nationality = Utils.isValidString("Enter your Nationality: ");
+        String nationality = Utils.getValidInput("Enter your Nationality: ", Utils::isValidString, "Nationality cannot be empty.");
 
         if (editApplicationDetails(user, new String[]{address, validDate, nationality})) {
             displayPostalDetails(user, address, validDate, nationality);
@@ -63,13 +66,15 @@ public class Dashboard {
     }
 
     private static void showBarangayForm() {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("BARANGAY ID");
         System.out.println("You selected Barangay ID. Please fill out the Barangay ID application form.");
         User user = autofillOrManual();
         System.out.print("Enter Address: ");
         String address = Main.sc.nextLine();
         String validDate = Utils.getValidDate("Enter your date of birth (MM-DD-YYYY): ");
         String contactNumber = user.getPhoneNumber();
-        String sex = Utils.getValidGender("Enter your gender (M/F): ");
+        String sex = Utils.getValidGender("Enter your gender (Male/Female): ");
         System.out.print("Enter Civil Status: ");
         String civilStatus = Main.sc.nextLine();
         String[] emergencyDetails = getEmergencyDetails();
@@ -84,27 +89,38 @@ public class Dashboard {
     }
 
     private static void showCompanyForm() {
+        Utils.clearScreen();
+        Utils.displayFramedMessage("COMPANY ID");
         System.out.println("You selected Company ID. Please fill out the Company ID application form.");
         User user = autofillOrManual();
         System.out.print("Enter Address: ");
         String address = Main.sc.nextLine();
         String tin = Utils.getValidInput("Enter TIN: ", Utils::isValidTIN, "Invalid TIN.");
         String philHealth = Utils.getValidInput("Enter PhilHealth Number: ", Utils::isValidPhilHealth, "Invalid PhilHealth number.");
-        String pagIbig = Utils.getValidInput("Enter Pag-IBIG Number: ", Utils::isValidPagIbig, "Invalid Pag-IBIG number.");
+        String gender = Utils.getValidGender("Enter your Gender (Male/Female): "); // Correct field label for gender
+        String civilStatus = Utils.getValidInput("Enter Civil Status: ", Utils::isValidString, "Invalid Civil Status."); // Correct field for civil status
         String[] emergencyDetails = getEmergencyDetails();
-
-        if (editApplicationDetails(user, new String[]{address, tin, philHealth, pagIbig}, emergencyDetails)) {
-            displayCompanyDetails(user, address, tin, philHealth, pagIbig, emergencyDetails);
-            addFinalizedDetails("Company ID", user, address, tin, philHealth, pagIbig, 
-                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
-            displayFinalDetails("Company ID", user, address, tin, philHealth, pagIbig, 
-                                emergencyDetails[0], emergencyDetails[1], emergencyDetails[2]);
+    
+        if (editApplicationDetails(user, new String[]{address, tin, philHealth, gender, civilStatus}, emergencyDetails)) {
+            displayCompanyDetails(user, address, tin, philHealth, gender, civilStatus, emergencyDetails);
+            addFinalizedDetails("Company ID", user, 
+                                "Address: " + address, "TIN: " + tin, "PhilHealth Number: " + philHealth, 
+                                "Gender: " + gender, "Civil Status: " + civilStatus,
+                                "Emergency Contact Name: " + emergencyDetails[0], 
+                                "Emergency Contact Number: " + emergencyDetails[1], 
+                                "Emergency Contact Relationship: " + emergencyDetails[2]);
+            displayFinalDetails("Company ID", user, 
+                                "Address: " + address, "TIN: " + tin, "PhilHealth Number: " + philHealth, 
+                                "Gender: " + gender, "Civil Status: " + civilStatus,
+                                "Emergency Contact Name: " + emergencyDetails[0], 
+                                "Emergency Contact Number: " + emergencyDetails[1], 
+                                "Emergency Contact Relationship: " + emergencyDetails[2]);
         }
     }
     
     private static void addFinalizedDetails(String formType, User user, String... details) {
         StringBuilder finalizedDetail = new StringBuilder();
-        finalizedDetail.append("\n--- Finalized Details ---\n");
+        finalizedDetail.append("Finalized Details\n");
         finalizedDetail.append("Form Type: ").append(formType).append("\n");
         finalizedDetail.append("Name: ").append(user.getFirstName()).append(" ")
                 .append(user.getMiddleName()).append(" ").append(user.getLastName()).append("\n");
@@ -119,34 +135,39 @@ public class Dashboard {
     private static void displayFinalDetails(String formType, User user, String... details) {
         Utils.displayFramedMessage("Finalized Details");
         System.out.println("Form Type: " + formType);
-        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.printf("Age: %d%n", user.getAge());
-        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
+        System.out.println("User Information:");
+        System.out.printf("  Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
+        System.out.printf("  Age: %d%n", user.getAge());
+        System.out.printf("  Phone Number: %s%n", user.getPhoneNumber());
+
+        System.out.println("Additional Details:");
         for (String detail : details) {
-            System.out.println(detail);
+            System.out.printf("  %s%n", detail);
         }
 
         while (true) {
             System.out.println("\nOptions:");
             System.out.println("1. Return to Dashboard");
             System.out.println("2. Exit");
-            System.out.print("Enter your choice: ");
-            String choice = Main.sc.nextLine().trim();
-            if ("1".equals(choice)) {
-                return; // Return to the main menu
-            } else if ("2".equals(choice)) {
-                System.out.println("Exiting the system. Thank you!");
-                System.exit(0); // Exit the application
+            System.out.print("Please select an option: ");
+            String entry = Main.sc.nextLine().trim();
+            if ("1".equals(entry)) {
+                return;
+            } else if ("2".equals(entry)) {
+                System.out.println("Exiting the system. Have a great day!");
+                System.exit(0);
             } else {
-                System.out.println("Invalid choice. Please select 1 or 2.");
+                System.out.println("Invalid entry. Please select 1 or 2.");
             }
         }
     }
+    
+    
 
     private static User autofillOrManual() {
-        System.out.print("Do you want to autofill the form? (y/n): ");
-        String choice = Main.sc.nextLine().trim().toLowerCase();
-        if (choice.equals("y")) {
+        System.out.print("Do you want to autofill the form? (yes/no): ");
+        String entry = Main.sc.nextLine().trim().toLowerCase();
+        if (entry.equals("y")) {
             System.out.print("Enter your username: ");
             String username = Main.sc.nextLine().trim().toLowerCase();
             User user = Utils.findUser(username);
@@ -192,27 +213,34 @@ public class Dashboard {
 
     private static boolean editApplicationDetails(User user, String[] mainDetails, String... optionalDetails) {
         System.out.println("\nReview your details:");
-        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.printf("Age: %d%n", user.getAge());
-        System.out.printf("Phone Number: %s%n", user.getPhoneNumber());
-
-        for (String detail : mainDetails) {
-            System.out.println(detail);
+        System.out.println("Name: " + user.getFirstName() + " " + user.getMiddleName() + " " + user.getLastName());
+        System.out.println("Age: " + user.getAge());
+        System.out.println("Phone Number: " + user.getPhoneNumber());
+    
+        // Define labels for the main details
+        String[] mainDetailLabels = {"Address", "TIN ID:", "PhilHealth ID", "Pag-Ibig ID", "Gender", "Civil Status"};
+    
+        // Display main details with labels
+        System.out.println("\nAdditional Details:");
+        for (int i = 0; i < mainDetails.length; i++) {
+            String label = i < mainDetailLabels.length ? mainDetailLabels[i] : "Detail " + (i + 1);
+            System.out.println("  " + label + ": " + mainDetails[i]);
         }
+    
+        // Display optional/emergency details if present
         if (optionalDetails.length > 0) {
-            System.out.println("Emergency Details:");
+            System.out.println("\nIn case of emergency:");
             System.out.println("  Name: " + optionalDetails[0]);
             System.out.println("  Contact Number: " + optionalDetails[1]);
-            System.out.println("  Relationship: " + optionalDetails[2]);
+            System.out.println("  Contact Relationship: " + optionalDetails[2]);
         }
-
-        System.out.print("Would you like to edit any information? (y/n): ");
-        String choice = Main.sc.nextLine().trim().toLowerCase();
-        return !choice.equals("y");
+    
+        System.out.print("\nWould you like to edit any information? (yes/no): ");
+        String entry = Main.sc.nextLine().trim().toLowerCase();
+        return !entry.equals("yes");
     }
-
     public static void displayPostalDetails(User user, String address, String validDate, String nationality) {
-        System.out.println("\n--- Postal Details ---");
+        Utils.displayFramedMessage("POSTAL ID");
         System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
         System.out.printf("Address: %s%n", address);
         System.out.printf("Date of Birth: %s%n", validDate);
@@ -221,7 +249,7 @@ public class Dashboard {
 
     public static void displayBarangayDetails(User user, String address, String validDate, String contactNumber,
                                               String sex, String civilStatus, String[] emergencyDetails) {
-        System.out.println("\n--- Barangay Details ---");
+        Utils.displayFramedMessage("Barangay ID");
         System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
         System.out.printf("Address: %s%n", address);
         System.out.printf("Date of Birth: %s%n", validDate);
@@ -235,16 +263,17 @@ public class Dashboard {
     }
 
     public static void displayCompanyDetails(User user, String address, String tin, String philHealth,
-                                             String pagIbig, String[] emergencyDetails) {
-        System.out.println("\n--- Company Details ---");
-        System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
-        System.out.printf("Address: %s%n", address);
-        System.out.printf("TIN: %s%n", tin);
-        System.out.printf("PhilHealth Number: %s%n", philHealth);
-        System.out.printf("Pag-IBIG Number: %s%n", pagIbig);
-        System.out.println("Emergency Contact:");
-        System.out.printf("  Name: %s%n", emergencyDetails[0]);
-        System.out.printf("  Contact Number: %s%n", emergencyDetails[1]);
-        System.out.printf("  Relationship: %s%n", emergencyDetails[2]);
-    }
+                                         String gender, String civilStatus, String[] emergencyDetails) {
+    Utils.displayFramedMessage("Company ID");
+    System.out.printf("Name: %s %s %s%n", user.getFirstName(), user.getMiddleName(), user.getLastName());
+    System.out.printf("Address: %s%n", address);
+    System.out.printf("TIN: %s%n", tin);
+    System.out.printf("PhilHealth Number: %s%n", philHealth);
+    System.out.printf("Gender: %s%n", gender);
+    System.out.printf("Civil Status: %s%n", civilStatus);
+    System.out.println("Emergency Contact:");
+    System.out.printf("  Name: %s%n", emergencyDetails[0]);
+    System.out.printf("  Contact Number: %s%n", emergencyDetails[1]);
+    System.out.printf("  Relationship: %s%n", emergencyDetails[2]);
+}
 }

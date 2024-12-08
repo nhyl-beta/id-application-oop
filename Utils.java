@@ -1,48 +1,21 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.function.Predicate;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 public class Utils {
+    public static final Scanner sc = new Scanner(System.in);
     private static final String DATABASE_FILE = "userDatabase.txt";
-    private static final int TOTALWIDTH = 70;
 
-    // Clear the screen
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
-    // Display a framed message
-    public static void displayFramedMessage(String message) {
-        int messageLength = message.length();
-        if (messageLength > TOTALWIDTH) {
-            System.out.println("Message is too long to fit in the frame.");
-            return;
-        }
-
-        int padding = (TOTALWIDTH - messageLength) / 2;
-        String paddedMessage = " ".repeat(padding) + message + " ".repeat(padding);
-
-        // Add extra space if TOTALWIDTH is odd
-        if ((TOTALWIDTH - messageLength) % 2 != 0) {
-            paddedMessage += " ";
-        }
-
-        System.out.println("-".repeat(TOTALWIDTH));
-        System.out.println();
-        System.out.println(paddedMessage);
-        System.out.println();
-        System.out.println("-".repeat(TOTALWIDTH));
-    }
-
-    // Get valid input using a custom validator
     public static String getValidInput(String prompt, Predicate<String> validator, String errorMessage) {
         while (true) {
             System.out.print(prompt);
-            String input = Main.sc.nextLine().trim();
+            String input = sc.nextLine().trim();
             if (validator.test(input)) {
                 return input;
             } else {
@@ -51,89 +24,48 @@ public class Utils {
         }
     }
 
-    // Get valid name (alphabetic characters and spaces)
-    public static String getValidName(String prompt) {
-        return getValidInput(prompt, input -> input.matches("^[a-zA-Z ]+$"),
-                "Invalid input. Please enter alphabetic characters and spaces only.");
+    public static boolean isValidString(String input) {
+        return input != null && !input.isBlank();
     }
 
-    // Get valid general string
-    public static String isValidString(String prompt) {
-        return getValidInput(prompt, input -> input.matches("^[a-zA-Z ]+$"),
-                "Invalid input. Please enter alphabetic characters and spaces only.");
-    }
-
-    // Get valid integer
-    public static int getValidInteger(String prompt, Predicate<Integer> validator, String errorMessage) {
-        while (true) {
-            System.out.print(prompt);
-            try {
-                int input = Integer.parseInt(Main.sc.nextLine().trim());
-                if (validator.test(input)) {
-                    return input;
-                } else {
-                    System.out.println(errorMessage);
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number. Please try again.");
-            }
-        }
-    }
-
-    // Get valid date in MM-DD-YYYY format
-    public static String getValidDate(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            String input = Main.sc.nextLine().trim();
-
-            if (input.matches("^(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])-(\\d{4})$")) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-                    LocalDate.parse(input, formatter); // Validate date
-                    return input;
-                } catch (DateTimeParseException e) {
-                    System.out.println("Invalid date. Please ensure the day is valid for the given month and year.");
-                }
-            } else {
-                System.out.println("Invalid format. Please use MM-DD-YYYY.");
-            }
-        }
-    }
-
-    // Get valid gender
-    public static String getValidGender(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            String input = Main.sc.nextLine().trim().toUpperCase();
-            if (input.equals("M") || input.equals("F")) {
-                return input;
-            } else {
-                System.out.println("Invalid input. Please enter 'M' for Male or 'F' for Female.");
-            }
-        }
-    }
-
-    // Validate phone number
-    public static boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber.matches("^09[0-9]{9}$");
-    }
-
-    // Validate TIN (9 digits)
     public static boolean isValidTIN(String tin) {
-        return tin.matches("^\\d{9}$");
+        return tin.matches("\\d{9}"); // Example: TIN must be 9 digits
     }
 
-    // Validate PhilHealth number (12 digits)
+    public static boolean isValidPhoneNumber(String phone) {
+        return phone.matches("^09\\d{9}$"); // Example: 11 digits, starts with 09
+    }
+
     public static boolean isValidPhilHealth(String philHealth) {
-        return philHealth.matches("^\\d{12}$");
+        return philHealth.matches("\\d{12}"); // Example: PhilHealth must be 12 digits
     }
 
-    // Validate Pag-IBIG number (10 digits)
-    public static boolean isValidPagIbig(String pagIbig) {
-        return pagIbig.matches("^\\d{10}$");
+    public static void clearScreen() {
+        System.out.println("\033[H\033[2J");
+        System.out.flush();
     }
 
-    // Load user data from file
+    public static void displayFramedMessage(String message) {
+        System.out.println("\n" + "=".repeat(40));
+        System.out.println(message);
+        System.out.println("=".repeat(40) + "\n");
+    }
+
+    public static String getValidDate(String prompt) {
+        return getValidInput(prompt, input -> input.matches("^\\d{2}-\\d{2}-\\d{4}$"),
+                "Invalid date format. Please use MM-DD-YYYY.");
+    }
+
+    public static String getValidGender(String prompt) {
+        return getValidInput(prompt, input -> input.equalsIgnoreCase("Male") || input.equalsIgnoreCase("Female"),
+                "Invalid gender. Please enter Male or Female.");
+    }
+
+    public static User findUser(String username) {
+        HashMap<String, User> userDatabase = loadUsers();
+        return userDatabase.get(username);
+    }
+
     public static HashMap<String, User> loadUsers() {
         HashMap<String, User> userDatabase = new HashMap<>();
         File file = new File(DATABASE_FILE);
@@ -169,8 +101,7 @@ public class Utils {
         return userDatabase;
     }
 
-    // Save user data to file
-    public static void saveUsers(HashMap<String, User> userDatabase) {
+     public static void saveUsers(HashMap<String, User> userDatabase) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(DATABASE_FILE))) {
             for (User user : userDatabase.values()) {
                 writer.write(String.join("|",
@@ -190,8 +121,22 @@ public class Utils {
         }
     }
 
-    public static User findUser(String username) {
-        HashMap<String, User> userDatabase = loadUsers();
-        return userDatabase.get(username);
+    public static String getValidName(String prompt) {
+        return getValidInput(prompt, Utils::isValidString, "Name cannot be empty.");
+    }
+
+    public static int getValidInteger(String prompt, Predicate<Integer> validator, String errorMessage) {
+        while (true) {
+            try {
+                System.out.print(prompt);
+                int input = Integer.parseInt(sc.nextLine().trim());
+                if (validator.test(input)) {
+                    return input;
+                }
+            } catch (NumberFormatException e) {
+                // Fall through to error message
+            }
+            System.out.println(errorMessage);
+        }
     }
 }
