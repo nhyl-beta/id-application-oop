@@ -127,3 +127,7 @@ Press Enter to continue
 so on and so forth
 
 -------------------------------
+
+change y/n to Yes/No
+change m/f to Male/Female
+valid input for civil status Single, Married, Widowed, Separated, Annulled
