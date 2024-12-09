@@ -218,13 +218,13 @@ public class Dashboard {
         System.out.println("Phone Number: " + user.getPhoneNumber());
     
         // Define labels for the main details
-        String[] mainDetailLabels = {"Address", "TIN ID:", "PhilHealth ID", "Pag-Ibig ID", "Gender", "Civil Status"};
+        String[] mainDetailLabels = {};
     
         // Display main details with labels
         System.out.println("\nAdditional Details:");
         for (int i = 0; i < mainDetails.length; i++) {
-            String label = i < mainDetailLabels.length ? mainDetailLabels[i] : "Detail " + (i + 1);
-            System.out.println("  " + label + ": " + mainDetails[i]);
+            String label = i < mainDetailLabels.length ? mainDetailLabels[i] : " ";
+            System.out.println("  " + label + "  " + mainDetails[i]);
         }
     
         // Display optional/emergency details if present
